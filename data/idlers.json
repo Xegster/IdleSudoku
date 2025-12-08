@@ -1,0 +1,94 @@
+{
+  "idlers": [
+    {
+      "id": "elementarySchool",
+      "name": "Elementary School Class",
+      "image": "elementary_school.png",
+      "unlockLevel": 5,
+      "levels": [
+        { "level": 1, "sudokusProduced": 1, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 2, "sudokusProduced": 2, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 3, "sudokusProduced": 3, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 4, "sudokusProduced": 4, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 5, "sudokusProduced": 5, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 6, "sudokusProduced": 6, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 7, "sudokusProduced": 7, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 8, "sudokusProduced": 8, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 9, "sudokusProduced": 9, "ratePerMinute": 1, "upgradeCost": 10 },
+        { "level": 10, "sudokusProduced": 10, "ratePerMinute": 1, "upgradeCost": 10 }
+      ]
+    },
+    {
+      "id": "seniorsHome",
+      "name": "Senior's Home",
+      "image": "seniors_home.png",
+      "unlockLevel": 5,
+      "levels": [
+        { "level": 1, "sudokusProduced": 2, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 2, "sudokusProduced": 4, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 3, "sudokusProduced": 6, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 4, "sudokusProduced": 8, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 5, "sudokusProduced": 10, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 6, "sudokusProduced": 12, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 7, "sudokusProduced": 14, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 8, "sudokusProduced": 16, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 9, "sudokusProduced": 18, "ratePerMinute": 2, "upgradeCost": 10 },
+        { "level": 10, "sudokusProduced": 20, "ratePerMinute": 2, "upgradeCost": 10 }
+      ]
+    },
+    {
+      "id": "engineers",
+      "name": "Engineers",
+      "image": "engineers.png",
+      "unlockLevel": 5,
+      "levels": [
+        { "level": 1, "sudokusProduced": 3, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 2, "sudokusProduced": 6, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 3, "sudokusProduced": 9, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 4, "sudokusProduced": 12, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 5, "sudokusProduced": 15, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 6, "sudokusProduced": 18, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 7, "sudokusProduced": 21, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 8, "sudokusProduced": 24, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 9, "sudokusProduced": 27, "ratePerMinute": 3, "upgradeCost": 10 },
+        { "level": 10, "sudokusProduced": 30, "ratePerMinute": 3, "upgradeCost": 10 }
+      ]
+    },
+    {
+      "id": "mathematicians",
+      "name": "Mathematicians",
+      "image": "mathematicians.png",
+      "unlockLevel": 5,
+      "levels": [
+        { "level": 1, "sudokusProduced": 4, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 2, "sudokusProduced": 8, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 3, "sudokusProduced": 12, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 4, "sudokusProduced": 16, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 5, "sudokusProduced": 20, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 6, "sudokusProduced": 24, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 7, "sudokusProduced": 28, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 8, "sudokusProduced": 32, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 9, "sudokusProduced": 36, "ratePerMinute": 4, "upgradeCost": 10 },
+        { "level": 10, "sudokusProduced": 40, "ratePerMinute": 4, "upgradeCost": 10 }
+      ]
+    },
+    {
+      "id": "softwareEngineers",
+      "name": "Software Engineers",
+      "image": "software_engineers.png",
+      "unlockLevel": 5,
+      "levels": [
+        { "level": 1, "sudokusProduced": 5, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 2, "sudokusProduced": 10, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 3, "sudokusProduced": 15, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 4, "sudokusProduced": 20, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 5, "sudokusProduced": 25, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 6, "sudokusProduced": 30, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 7, "sudokusProduced": 35, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 8, "sudokusProduced": 40, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 9, "sudokusProduced": 45, "ratePerMinute": 5, "upgradeCost": 10 },
+        { "level": 10, "sudokusProduced": 50, "ratePerMinute": 5, "upgradeCost": 10 }
+      ]
+    }
+  ]
+}

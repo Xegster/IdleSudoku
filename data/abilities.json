@@ -1,0 +1,49 @@
+{
+  "abilities": [
+    {
+      "id": "newSudoku",
+      "name": "New Sudoku",
+      "unlockLevel": 2
+    },
+    {
+      "id": "checkAnswers",
+      "name": "Check Answers",
+      "unlockLevel": 2
+    },
+    {
+      "id": "hintV1",
+      "name": "Hint V1",
+      "unlockLevel": 3,
+      "maxUses": 1
+    },
+    {
+      "id": "hintV2",
+      "name": "Hint V2",
+      "unlockLevel": 4,
+      "maxUses": 2
+    },
+    {
+      "id": "fillRow",
+      "name": "Fill Row",
+      "unlockLevel": 5,
+      "maxUses": 1
+    },
+    {
+      "id": "fillColumn",
+      "name": "Fill Column",
+      "unlockLevel": 5,
+      "maxUses": 1
+    },
+    {
+      "id": "fillQuadrant",
+      "name": "Fill Quadrant",
+      "unlockLevel": 5,
+      "maxUses": 1
+    },
+    {
+      "id": "autofill",
+      "name": "Autofill",
+      "unlockLevel": 6
+    }
+  ]
+}
