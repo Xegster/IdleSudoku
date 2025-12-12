@@ -22,11 +22,13 @@
     "react-native-safe-area-context": "^5.4.0",
     "react-native-screens": "~3.31.0",
     "react-native-svg": "15.2.0",
+    "sql.js": "^1.13.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
     "babel-plugin-module-resolver": "^5.0.0",
+    "babel-plugin-transform-import-meta": "^2.3.3",
     "cross-env": "^7.0.3",
     "patch-package": "^8.0.0"
   },
