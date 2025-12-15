@@ -20,6 +20,10 @@ import {
 } from '@gluestack-ui/themed';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useAbilitiesStore } from '@/stores/abilitiesStore';
+import { __DEV__ } from 'react-native';
+
+// More reliable debug mode detection
+const isDebugMode = __DEV__ || process.env.NODE_ENV !== 'production';
 
 export const SettingsModal = ({
   isOpen,
@@ -71,6 +75,20 @@ export const SettingsModal = ({
                 <Switch
                   value={settingsStore.autofillEnabled}
                   onValueChange={settingsStore.toggleAutofill}
+                >
+                  <SwitchTrack>
+                    <SwitchThumb />
+                  </SwitchTrack>
+                </Switch>
+              </HStack>
+            )}
+
+            {isDebugMode && (
+              <HStack justifyContent="space-between" alignItems="center">
+                <Text size="md">Debug Errors</Text>
+                <Switch
+                  value={settingsStore.debugErrorsEnabled}
+                  onValueChange={settingsStore.toggleDebugErrors}
                 >
                   <SwitchTrack>
                     <SwitchThumb />

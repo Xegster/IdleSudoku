@@ -82,6 +82,7 @@ export async function getSettings() {
     soundEnabled: true,
     checkAnswersEnabled: false,
     autofillEnabled: false,
+    debugErrorsEnabled: true,
   };
   
   if (results && results.length > 0) {
@@ -89,6 +90,7 @@ export async function getSettings() {
     settings.soundEnabled = Boolean(result.soundEnabled);
     settings.checkAnswersEnabled = Boolean(result.checkAnswersEnabled);
     settings.autofillEnabled = Boolean(result.autofillEnabled);
+    settings.debugErrorsEnabled = result.debugErrorsEnabled !== undefined ? Boolean(result.debugErrorsEnabled) : true;
   }
   
   return settings;

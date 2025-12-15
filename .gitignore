@@ -39,3 +39,6 @@ yarn-error.*
 # Build
 dist/
 build/
+
+# Kaggle dataset (large files - 1.5GB)
+kaggle_sudokus/

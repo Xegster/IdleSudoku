@@ -7,6 +7,9 @@ import { usePlayerStore } from '@/stores/playerStore';
 import { useAbilitiesStore } from '@/stores/abilitiesStore';
 import { isValidSudoku } from '@/game/sudoku/validator';
 import { __DEV__ } from 'react-native';
+
+// More reliable debug mode detection
+const isDebugMode = __DEV__ || process.env.NODE_ENV !== 'production';
 import { useHintV1 } from '@/game/abilities/hintV1';
 import { useHintV2 } from '@/game/abilities/hintV2';
 import { useFillRow, useFillColumn, useFillQuadrant } from '@/game/abilities/fillRowColumnQuadrant';
@@ -18,6 +21,7 @@ export const CompleteSudokuTab = () => {
   const abilitiesStore = useAbilitiesStore();
   const [fillModalOpen, setFillModalOpen] = useState(false);
   const [fillType, setFillType] = useState(null);
+  const [isCompleting, setIsCompleting] = useState(false);
 
   const hintV1 = useHintV1();
   const hintV2 = useHintV2();
@@ -44,16 +48,35 @@ export const CompleteSudokuTab = () => {
   }, [gameStore.currentBoard]);
 
   const handleComplete = async () => {
-    if (!gameStore.isComplete) return;
+    if (isCompleting) return; // Prevent double-clicks
+    
+    if (!gameStore.isComplete) {
+      console.warn('Cannot complete: board is not complete');
+      return;
+    }
 
-    const isValid = isValidSudoku(gameStore.playerBoard);
-    if (isValid) {
-      await playerStore.completeSudoku(gameStore.currentBoard?.difficulty || 'easy');
-      gameStore.loadNewBoard();
-      abilitiesStore.checkUnlocks();
-    } else {
-      // Handle invalid board
-      playerStore.addMistake();
+    if (!gameStore.currentBoard) {
+      console.error('Cannot complete: no current board');
+      return;
+    }
+
+    try {
+      setIsCompleting(true);
+      
+      const isValid = isValidSudoku(gameStore.playerBoard);
+      if (isValid) {
+        await playerStore.completeSudoku(gameStore.currentBoard.difficulty || 'easy');
+        gameStore.loadNewBoard();
+        abilitiesStore.checkUnlocks();
+      } else {
+        // Handle invalid board
+        console.warn('Board is invalid, adding mistake');
+        playerStore.addMistake();
+      }
+    } catch (error) {
+      console.error('Error completing sudoku:', error);
+    } finally {
+      setIsCompleting(false);
     }
   };
 
@@ -68,11 +91,18 @@ export const CompleteSudokuTab = () => {
     }
   };
 
-  const handleDebugComplete = () => {
-    if (__DEV__) {
-      playerStore.completeSudoku(gameStore.currentBoard?.difficulty || 'easy');
-      gameStore.loadNewBoard();
-      abilitiesStore.checkUnlocks();
+  const handleAutofillSudoku = () => {
+    if (isDebugMode && gameStore.currentBoard) {
+      const { currentBoard } = gameStore;
+      // Fill all empty cells with the solution
+      for (let row = 0; row < 9; row++) {
+        for (let col = 0; col < 9; col++) {
+          if (currentBoard.puzzle[row][col] === 0) {
+            const correctValue = currentBoard.solution[row][col];
+            gameStore.setCell(row, col, correctValue);
+          }
+        }
+      }
     }
   };
 
@@ -118,14 +148,19 @@ export const CompleteSudokuTab = () => {
           )}
 
           {gameStore.isComplete && (
-            <Button onPress={handleComplete} action="positive" size="md">
-              <ButtonText>Complete Sudoku</ButtonText>
+            <Button 
+              onPress={handleComplete} 
+              action="positive" 
+              size="md"
+              isDisabled={isCompleting}
+            >
+              <ButtonText>{isCompleting ? 'Completing...' : 'Complete Sudoku'}</ButtonText>
             </Button>
           )}
 
-          {__DEV__ && (
-            <Button onPress={handleDebugComplete} action="negative" size="md">
-              <ButtonText>Complete Now (Debug)</ButtonText>
+          {isDebugMode && (
+            <Button onPress={handleAutofillSudoku} action="negative" size="md">
+              <ButtonText>Autofill Sudoku</ButtonText>
             </Button>
           )}
         </HStack>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, HStack, Button, ButtonText, VStack } from '@gluestack-ui/themed';
+import { Box, HStack, Button, ButtonText, VStack, Text } from '@gluestack-ui/themed';
 import { SettingsModal } from '@/components/modals/SettingsModal';
 import { StatsModal } from '@/components/modals/StatsModal';
 import { CompleteSudokuTab } from './tabs/CompleteSudokuTab';
@@ -67,7 +67,25 @@ export const GameScreen = () => {
         borderBottomWidth={1}
         borderBottomColor="$gray300"
       >
-        <Box flex={1} />
+        <Box flex={1}>
+          <HStack space="sm" alignItems="center">
+            <Text size="md" fontWeight="$semibold" color="$gray700">
+              Available Sudokus:
+            </Text>
+            <Box
+              bg="$blue100"
+              px="$3"
+              py="$1"
+              borderRadius="$md"
+              borderWidth={1}
+              borderColor="$blue300"
+            >
+              <Text size="lg" fontWeight="$bold" color="$blue700">
+                {playerStore.availableSudokus}
+              </Text>
+            </Box>
+          </HStack>
+        </Box>
         <HStack space="sm">
           <Button
             onPress={() => setSettingsOpen(true)}

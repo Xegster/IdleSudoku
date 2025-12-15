@@ -109,3 +109,118 @@ export function getQuadrantCells(quadrantIndex) {
   return cells;
 }
 
+/**
+ * Finds all cells that have duplicate values in their row, column, or quadrant.
+ * Returns a Set of cell keys in the format "row,col" for cells that have duplicates.
+ */
+export function findDuplicateCells(board) {
+  const duplicateCells = new Set();
+
+  // Safety check: ensure board is valid
+  if (!board || !Array.isArray(board) || board.length !== 9) {
+    return duplicateCells;
+  }
+
+  // Check rows
+  for (let row = 0; row < 9; row++) {
+    // Safety check: ensure row exists
+    if (!board[row] || !Array.isArray(board[row]) || board[row].length !== 9) {
+      continue;
+    }
+
+    const valueCounts = new Map();
+    const cellPositions = new Map();
+    
+    for (let col = 0; col < 9; col++) {
+      const value = board[row][col];
+      if (value !== 0 && value !== null && value !== undefined) {
+        if (!valueCounts.has(value)) {
+          valueCounts.set(value, []);
+        }
+        valueCounts.get(value).push({ row, col });
+        cellPositions.set(`${row},${col}`, value);
+      }
+    }
+    
+    // Mark all cells with duplicate values
+    valueCounts.forEach((positions, value) => {
+      if (positions.length > 1) {
+        positions.forEach(pos => {
+          duplicateCells.add(`${pos.row},${pos.col}`);
+        });
+      }
+    });
+  }
+
+  // Check columns
+  for (let col = 0; col < 9; col++) {
+    const valueCounts = new Map();
+    
+    for (let row = 0; row < 9; row++) {
+      // Safety check: ensure row and column exist
+      if (!board[row] || !Array.isArray(board[row]) || board[row].length <= col) {
+        continue;
+      }
+
+      const value = board[row][col];
+      if (value !== 0 && value !== null && value !== undefined) {
+        if (!valueCounts.has(value)) {
+          valueCounts.set(value, []);
+        }
+        valueCounts.get(value).push({ row, col });
+      }
+    }
+    
+    // Mark all cells with duplicate values
+    valueCounts.forEach((positions, value) => {
+      if (positions.length > 1) {
+        positions.forEach(pos => {
+          duplicateCells.add(`${pos.row},${pos.col}`);
+        });
+      }
+    });
+  }
+
+  // Check quadrants
+  for (let quadrantRow = 0; quadrantRow < 3; quadrantRow++) {
+    for (let quadrantCol = 0; quadrantCol < 3; quadrantCol++) {
+      const startRow = quadrantRow * 3;
+      const startCol = quadrantCol * 3;
+      const valueCounts = new Map();
+      
+      for (let row = startRow; row < startRow + 3; row++) {
+        // Safety check: ensure row exists
+        if (!board[row] || !Array.isArray(board[row])) {
+          continue;
+        }
+
+        for (let col = startCol; col < startCol + 3; col++) {
+          // Safety check: ensure column exists
+          if (board[row].length <= col) {
+            continue;
+          }
+
+          const value = board[row][col];
+          if (value !== 0 && value !== null && value !== undefined) {
+            if (!valueCounts.has(value)) {
+              valueCounts.set(value, []);
+            }
+            valueCounts.get(value).push({ row, col });
+          }
+        }
+      }
+      
+      // Mark all cells with duplicate values
+      valueCounts.forEach((positions, value) => {
+        if (positions.length > 1) {
+          positions.forEach(pos => {
+            duplicateCells.add(`${pos.row},${pos.col}`);
+          });
+        }
+      });
+    }
+  }
+
+  return duplicateCells;
+}
+

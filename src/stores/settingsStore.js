@@ -5,6 +5,7 @@ export const useSettingsStore = create((set, get) => ({
   soundEnabled: true,
   checkAnswersEnabled: false,
   autofillEnabled: false,
+  debugErrorsEnabled: true,
 
   loadSettings: async () => {
     try {
@@ -18,6 +19,7 @@ export const useSettingsStore = create((set, get) => ({
           soundEnabled: Boolean(result.soundEnabled),
           checkAnswersEnabled: Boolean(result.checkAnswersEnabled),
           autofillEnabled: Boolean(result.autofillEnabled),
+          debugErrorsEnabled: result.debugErrorsEnabled !== undefined ? Boolean(result.debugErrorsEnabled) : true,
         });
       }
     } catch (error) {
@@ -34,12 +36,14 @@ export const useSettingsStore = create((set, get) => ({
         `UPDATE settings SET 
           soundEnabled = ?, 
           checkAnswersEnabled = ?, 
-          autofillEnabled = ?
+          autofillEnabled = ?,
+          debugErrorsEnabled = ?
         WHERE id = 1`,
         [
           state.soundEnabled ? 1 : 0,
           state.checkAnswersEnabled ? 1 : 0,
           state.autofillEnabled ? 1 : 0,
+          state.debugErrorsEnabled ? 1 : 0,
         ]
       );
     } catch (error) {
@@ -59,6 +63,11 @@ export const useSettingsStore = create((set, get) => ({
 
   toggleAutofill: () => {
     set(state => ({ autofillEnabled: !state.autofillEnabled }));
+    get().saveSettings();
+  },
+
+  toggleDebugErrors: () => {
+    set(state => ({ debugErrorsEnabled: !state.debugErrorsEnabled }));
     get().saveSettings();
   },
 }));

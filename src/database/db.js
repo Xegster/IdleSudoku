@@ -161,6 +161,9 @@ export async function initializeDatabase() {
     // Create tables
     await db.execAsync(CREATE_TABLES);
     
+    // Run migrations for existing databases
+    await runMigrations(db);
+    
     // Initialize default data
     await db.execAsync(INITIALIZE_PLAYER);
     await db.execAsync(INITIALIZE_COMPLETED_SUDOKUS);
@@ -170,6 +173,26 @@ export async function initializeDatabase() {
   } catch (error) {
     console.error('Error initializing database:', error);
     throw error;
+  }
+}
+
+// Run database migrations
+async function runMigrations(database) {
+  try {
+    // Migration: Add debugErrorsEnabled column if it doesn't exist
+    // SQLite doesn't support IF NOT EXISTS for ALTER TABLE, so we check first
+    try {
+      // Try to query the column - if it fails, the column doesn't exist
+      await database.getFirstAsync('SELECT debugErrorsEnabled FROM settings LIMIT 1');
+    } catch (error) {
+      // Column doesn't exist, add it
+      console.log('Adding debugErrorsEnabled column to settings table...');
+      await database.runAsync('ALTER TABLE settings ADD COLUMN debugErrorsEnabled INTEGER NOT NULL DEFAULT 1');
+      console.log('Migration completed: debugErrorsEnabled column added');
+    }
+  } catch (error) {
+    // If settings table doesn't exist yet, that's fine - CREATE_TABLES will handle it
+    console.log('Migration check skipped (table may not exist yet):', error.message);
   }
 }
 

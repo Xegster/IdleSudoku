@@ -28,7 +28,8 @@ export const CREATE_TABLES = `
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     soundEnabled INTEGER NOT NULL DEFAULT 1,
     checkAnswersEnabled INTEGER NOT NULL DEFAULT 0,
-    autofillEnabled INTEGER NOT NULL DEFAULT 0
+    autofillEnabled INTEGER NOT NULL DEFAULT 0,
+    debugErrorsEnabled INTEGER NOT NULL DEFAULT 1
   );
 
   CREATE TABLE IF NOT EXISTS abilityUnlocks (
@@ -54,7 +55,7 @@ export const INITIALIZE_COMPLETED_SUDOKUS = `
 `;
 
 export const INITIALIZE_SETTINGS = `
-  INSERT OR IGNORE INTO settings (id, soundEnabled, checkAnswersEnabled, autofillEnabled)
-  VALUES (1, 1, 0, 0);
+  INSERT OR IGNORE INTO settings (id, soundEnabled, checkAnswersEnabled, autofillEnabled, debugErrorsEnabled)
+  VALUES (1, 1, 0, 0, 1);
 `;
 
