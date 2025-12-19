@@ -213,5 +213,48 @@ export const usePlayerStore = create((set, get) => ({
     set({ mistakes: 0 });
     get().savePlayerData();
   },
+
+  resetGame: async () => {
+    try {
+      const db = getDatabase();
+      
+      // Ensure player row exists, then reset to initial values
+      await db.runAsync(
+        `INSERT OR REPLACE INTO player (id, level, totalCompletedSudokus, availableSudokus, maxLives, currentLives, mistakes)
+         VALUES (1, 1, 0, 0, 1, 1, 0)`
+      );
+      
+      // Reset completed sudokus counts - ensure rows exist first
+      const difficulties = ['easy', 'medium', 'hard', 'advanced'];
+      for (const difficulty of difficulties) {
+        await db.runAsync(
+          `INSERT OR REPLACE INTO completedSudokus (difficulty, count) VALUES (?, ?)`,
+          [difficulty, 0]
+        );
+      }
+      
+      // Reset player store state
+      set({
+        level: 1,
+        totalCompletedSudokus: 0,
+        availableSudokus: 0,
+        maxLives: 1,
+        currentLives: 1,
+        mistakes: 0,
+        completedSudokus: {
+          easy: 0,
+          medium: 0,
+          hard: 0,
+          advanced: 0,
+        },
+      });
+      
+      // Force update level calculation
+      get().updateLevel();
+    } catch (error) {
+      console.error('Error resetting game:', error);
+      throw error;
+    }
+  },
 }));
 

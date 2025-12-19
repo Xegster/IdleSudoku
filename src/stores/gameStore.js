@@ -115,5 +115,20 @@ export const useGameStore = create((set, get) => ({
     set({ isComplete: isFilled });
     return isFilled;
   },
+
+  resetGameState: () => {
+    get().stopAutofillTimer();
+    set({
+      currentBoard: null,
+      playerBoard: [],
+      selectedCell: null,
+      hintCells: [],
+      hintNumber: null,
+      autofillTimer: 60,
+      autofillInterval: null,
+      mistakes: 0,
+      isComplete: false,
+    });
+  },
 }));
 

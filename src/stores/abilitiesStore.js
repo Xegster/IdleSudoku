@@ -93,5 +93,20 @@ export const useAbilitiesStore = create((set, get) => ({
       }
     });
   },
+
+  resetAbilities: async () => {
+    try {
+      const db = getDatabase();
+      
+      // Delete all ability unlocks
+      await db.runAsync('DELETE FROM abilityUnlocks');
+      
+      // Reset store state
+      set({ unlockedAbilities: new Map() });
+    } catch (error) {
+      console.error('Error resetting abilities:', error);
+      throw error;
+    }
+  },
 }));
 

@@ -114,5 +114,20 @@ export const useIdlersStore = create((set, get) => ({
       .filter(idler => playerLevel >= idler.unlockLevel)
       .map(idler => idler.id);
   },
+
+  resetIdlers: async () => {
+    try {
+      const db = getDatabase();
+      
+      // Delete all idler progress
+      await db.runAsync('DELETE FROM idlerProgress');
+      
+      // Reset store state
+      set({ idlerProgress: new Map() });
+    } catch (error) {
+      console.error('Error resetting idlers:', error);
+      throw error;
+    }
+  },
 }));
 
