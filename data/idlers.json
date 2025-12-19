@@ -3,7 +3,7 @@
     {
       "id": "elementarySchool",
       "name": "Elementary School Class",
-      "image": "elementary_school.png",
+      "image": "elementary_school.gif",
       "unlockLevel": 5,
       "levels": [
         { "level": 1, "sudokusProduced": 1, "ratePerMinute": 1, "upgradeCost": 10 },

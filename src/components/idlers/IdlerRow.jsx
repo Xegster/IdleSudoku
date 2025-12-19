@@ -3,6 +3,7 @@ import { Box, HStack, VStack, Text, Button, ButtonText, Image, Progress, Progres
 import { getIdlers } from '@/config/loadConfig';
 import { useIdlersStore } from '@/stores/idlersStore';
 import { usePlayerStore } from '@/stores/playerStore';
+import { getIdlerImageSource } from '@/config/idlerImages';
 
 export const IdlerRow = ({ idlerId }) => {
   const idlerConfig = getIdlers().find(i => i.id === idlerId);
@@ -68,8 +69,21 @@ export const IdlerRow = ({ idlerId }) => {
           <Text size="xl" fontWeight="$bold">{currentLevel}</Text>
         </VStack>
 
-        <Box width={50} height={50} bg="$gray200" borderRadius="$md" justifyContent="center" alignItems="center">
-          <Text size="xs">{idlerConfig.name.substring(0, 2)}</Text>
+        <Box width={50} height={50} bg="$gray200" borderRadius="$md" overflow="hidden" justifyContent="center" alignItems="center">
+          {(() => {
+            const imageSource = getIdlerImageSource(idlerConfig.image);
+            if (imageSource) {
+              return (
+                <Image
+                  source={imageSource}
+                  alt={idlerConfig.name}
+                  style={{ width: '100%', height: '100%' }}
+                  resizeMode="contain"
+                />
+              );
+            }
+            return <Text size="xs">{idlerConfig.name.substring(0, 2)}</Text>;
+          })()}
         </Box>
 
         <VStack flex={1}>

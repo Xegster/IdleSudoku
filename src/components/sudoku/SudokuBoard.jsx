@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useCallback } from 'react';
-import { Box, HStack, VStack, Button, ButtonText } from '@gluestack-ui/themed';
+import { Box, HStack, VStack, Button, ButtonText, Text } from '@gluestack-ui/themed';
 import { Platform } from 'react-native';
 import { Cell } from './Cell';
 import { useGameStore } from '@/stores/gameStore';
@@ -168,6 +168,11 @@ export const SudokuBoard = () => {
         ))}
       </Box>
       {renderNumberPad()}
+      {currentBoard?.difficulty && (
+        <Text size="sm" color="$gray600" mt={2} textTransform="capitalize">
+          Difficulty: {currentBoard.difficulty}
+        </Text>
+      )}
     </VStack>
   );
 };

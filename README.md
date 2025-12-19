@@ -25,6 +25,32 @@ npm run web
 npm run windows
 ```
 
+### Running in Web Debug Mode
+
+To run the project in web debug mode using npm:
+
+```bash
+npm run web
+```
+
+This command will:
+1. Start the Expo development server
+2. Launch the web version in your default browser
+3. Enable hot reload for instant updates when you save files
+4. Provide full debugging capabilities through browser DevTools
+
+**Quick Steps:**
+1. Open a terminal in the project directory
+2. Run `npm run web`
+3. Wait for the browser to open automatically (or open `http://localhost:8081` manually)
+4. Use browser DevTools (F12) to debug your code
+
+**Note:** For VS Code debugging with breakpoints, see the "Debugging on Windows" section below.
+
+#### Troubleshooting: "TypeError: fetch failed" Error
+
+Get off the VPN!!!!
+
 ### Running as a Windows App
 
 You can run this project as a Windows application in two ways:

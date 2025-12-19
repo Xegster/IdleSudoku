@@ -1,6 +1,6 @@
-import levelsConfig from '../../data/levels.json';
-import abilitiesConfig from '../../data/abilities.json';
-import idlersConfig from '../../data/idlers.json';
+import levelsConfig from '@data/levels.json';
+import abilitiesConfig from '@data/abilities.json';
+import idlersConfig from '@data/idlers.json';
 
 export function getLevelRequirements() {
   return levelsConfig.levelRequirements;

@@ -70,6 +70,21 @@ export const GameScreen = () => {
         <Box flex={1}>
           <HStack space="sm" alignItems="center">
             <Text size="md" fontWeight="$semibold" color="$gray700">
+              Level:
+            </Text>
+            <Box
+              bg="$green100"
+              px="$3"
+              py="$1"
+              borderRadius="$md"
+              borderWidth={1}
+              borderColor="$green300"
+            >
+              <Text size="lg" fontWeight="$bold" color="$green700">
+                {playerStore.level}
+              </Text>
+            </Box>
+            <Text size="md" fontWeight="$semibold" color="$gray700">
               Available Sudokus:
             </Text>
             <Box
