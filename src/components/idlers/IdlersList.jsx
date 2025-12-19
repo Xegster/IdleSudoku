@@ -1,25 +1,40 @@
 import React from 'react';
 import { VStack, Box, Text } from '@gluestack-ui/themed';
 import { IdlerRow } from './IdlerRow';
+import { LockedIdlerRow } from './LockedIdlerRow';
 import { useIdlersStore } from '@/stores/idlersStore';
+import { usePlayerStore } from '@/stores/playerStore';
+import { getIdlers } from '@/config/loadConfig';
 
 export const IdlersList = () => {
   const idlersStore = useIdlersStore();
+  const playerStore = usePlayerStore();
   const unlockedIdlers = idlersStore.getUnlockedIdlers();
+  const allIdlers = getIdlers();
+  const playerLevel = playerStore.level;
 
-  if (unlockedIdlers.length === 0) {
-    return (
-      <Box p={4} alignItems="center">
-        <Text>No idlers unlocked yet. Reach level 5 to unlock!</Text>
-      </Box>
-    );
-  }
+  // Find the next idler to be unlocked (first locked idler)
+  const nextUnlockIdler = allIdlers.find(idler => playerLevel < idler.unlockLevel);
 
   return (
     <VStack space="sm" p="$4">
-      {unlockedIdlers.map(idlerId => (
-        <IdlerRow key={idlerId} idlerId={idlerId} />
-      ))}
+      {allIdlers.map(idler => {
+        const isUnlocked = unlockedIdlers.includes(idler.id);
+        const isNextUnlock = nextUnlockIdler && idler.id === nextUnlockIdler.id;
+
+        if (isUnlocked) {
+          return <IdlerRow key={idler.id} idlerId={idler.id} />;
+        } else {
+          return (
+            <LockedIdlerRow
+              key={idler.id}
+              idlerId={idler.id}
+              isNextUnlock={isNextUnlock}
+              unlockLevel={idler.unlockLevel}
+            />
+          );
+        }
+      })}
     </VStack>
   );
 };

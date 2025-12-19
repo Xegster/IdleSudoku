@@ -22,7 +22,7 @@
       "id": "seniorsHome",
       "name": "Senior's Home",
       "image": "seniors_home.png",
-      "unlockLevel": 5,
+      "unlockLevel": 10,
       "levels": [
         { "level": 1, "sudokusProduced": 2, "ratePerMinute": 2, "upgradeCost": 10 },
         { "level": 2, "sudokusProduced": 4, "ratePerMinute": 2, "upgradeCost": 10 },
@@ -40,7 +40,7 @@
       "id": "engineers",
       "name": "Engineers",
       "image": "engineers.png",
-      "unlockLevel": 5,
+      "unlockLevel": 15,
       "levels": [
         { "level": 1, "sudokusProduced": 3, "ratePerMinute": 3, "upgradeCost": 10 },
         { "level": 2, "sudokusProduced": 6, "ratePerMinute": 3, "upgradeCost": 10 },
@@ -58,7 +58,7 @@
       "id": "mathematicians",
       "name": "Mathematicians",
       "image": "mathematicians.png",
-      "unlockLevel": 5,
+      "unlockLevel": 20,
       "levels": [
         { "level": 1, "sudokusProduced": 4, "ratePerMinute": 4, "upgradeCost": 10 },
         { "level": 2, "sudokusProduced": 8, "ratePerMinute": 4, "upgradeCost": 10 },
@@ -76,7 +76,7 @@
       "id": "softwareEngineers",
       "name": "Software Engineers",
       "image": "software_engineers.png",
-      "unlockLevel": 5,
+      "unlockLevel": 25,
       "levels": [
         { "level": 1, "sudokusProduced": 5, "ratePerMinute": 5, "upgradeCost": 10 },
         { "level": 2, "sudokusProduced": 10, "ratePerMinute": 5, "upgradeCost": 10 },
