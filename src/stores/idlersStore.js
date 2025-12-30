@@ -109,9 +109,10 @@ export const useIdlersStore = create((set, get) => ({
   },
 
   getUnlockedIdlers: () => {
-    const playerLevel = usePlayerStore.getState().level;
+    // Use highestLevel instead of level so idlers don't re-lock when sudokus are spent
+    const playerHighestLevel = usePlayerStore.getState().highestLevel || usePlayerStore.getState().level;
     return getIdlers()
-      .filter(idler => playerLevel >= idler.unlockLevel)
+      .filter(idler => playerHighestLevel >= idler.unlockLevel)
       .map(idler => idler.id);
   },
 

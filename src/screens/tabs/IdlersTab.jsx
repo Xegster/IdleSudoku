@@ -12,7 +12,9 @@ export const IdlersTab = () => {
     idlersStore.loadIdlers();
   }, []);
 
-  if (playerStore.level < 5) {
+  // Use highestLevel instead of level so idlers tab doesn't re-lock when sudokus are spent
+  const playerHighestLevel = playerStore.highestLevel || playerStore.level;
+  if (playerHighestLevel < 5) {
     return (
       <Box p={4} alignItems="center" justifyContent="center" flex={1}>
         <Box>Reach level 5 to unlock idlers!</Box>

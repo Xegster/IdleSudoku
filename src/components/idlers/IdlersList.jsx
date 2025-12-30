@@ -11,10 +11,11 @@ export const IdlersList = () => {
   const playerStore = usePlayerStore();
   const unlockedIdlers = idlersStore.getUnlockedIdlers();
   const allIdlers = getIdlers();
-  const playerLevel = playerStore.level;
+  // Use highestLevel so next unlock doesn't change when sudokus are spent
+  const playerHighestLevel = playerStore.highestLevel || playerStore.level;
 
   // Find the next idler to be unlocked (first locked idler)
-  const nextUnlockIdler = allIdlers.find(idler => playerLevel < idler.unlockLevel);
+  const nextUnlockIdler = allIdlers.find(idler => playerHighestLevel < idler.unlockLevel);
 
   return (
     <VStack space="sm" p="$4">

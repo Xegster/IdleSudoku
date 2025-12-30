@@ -4,6 +4,7 @@ import { getLevelRequirements } from '@/config/loadConfig';
 
 export const usePlayerStore = create((set, get) => ({
   level: 1,
+  highestLevel: 1, // Track highest level achieved - never decreases
   totalCompletedSudokus: 0,
   availableSudokus: 0,
   maxLives: 1,
@@ -28,6 +29,7 @@ export const usePlayerStore = create((set, get) => ({
       if (playerResult) {
         set({
           level: playerResult.level,
+          highestLevel: playerResult.highestLevel || playerResult.level || 1,
           totalCompletedSudokus: playerResult.totalCompletedSudokus,
           availableSudokus: playerResult.availableSudokus,
           maxLives: playerResult.maxLives,
@@ -70,6 +72,7 @@ export const usePlayerStore = create((set, get) => ({
       await db.runAsync(
         `UPDATE player SET 
           level = ?, 
+          highestLevel = ?,
           totalCompletedSudokus = ?, 
           availableSudokus = ?, 
           maxLives = ?, 
@@ -78,6 +81,7 @@ export const usePlayerStore = create((set, get) => ({
         WHERE id = 1`,
         [
           state.level,
+          state.highestLevel,
           state.totalCompletedSudokus,
           state.availableSudokus,
           state.maxLives,
@@ -170,26 +174,31 @@ export const usePlayerStore = create((set, get) => ({
     const state = get();
     const requirements = getLevelRequirements();
     
-    // Find the highest level the player qualifies for
-    let newLevel = 1;
+    // Find the highest level the player qualifies for based on available sudokus
+    let calculatedLevel = 1;
     for (const req of requirements) {
       if (state.availableSudokus >= req.requiredSudokus) {
-        newLevel = req.level;
+        calculatedLevel = req.level;
       } else {
         break;
       }
     }
     
-    // Update max lives based on level
+    // Level should never decrease - use the maximum of calculated level and highest level achieved
+    const newLevel = Math.max(calculatedLevel, state.highestLevel || 1);
+    const newHighestLevel = Math.max(newLevel, state.highestLevel || 1);
+    
+    // Update max lives based on highest level (for unlock purposes)
     let newMaxLives = 1;
-    if (newLevel >= 4) {
+    if (newHighestLevel >= 4) {
       newMaxLives = 5;
-    } else if (newLevel >= 2) {
+    } else if (newHighestLevel >= 2) {
       newMaxLives = 3;
     }
     
     set({
       level: newLevel,
+      highestLevel: newHighestLevel,
       maxLives: newMaxLives,
       currentLives: Math.min(state.currentLives, newMaxLives),
     });
@@ -220,8 +229,8 @@ export const usePlayerStore = create((set, get) => ({
       
       // Ensure player row exists, then reset to initial values
       await db.runAsync(
-        `INSERT OR REPLACE INTO player (id, level, totalCompletedSudokus, availableSudokus, maxLives, currentLives, mistakes)
-         VALUES (1, 1, 0, 0, 1, 1, 0)`
+        `INSERT OR REPLACE INTO player (id, level, highestLevel, totalCompletedSudokus, availableSudokus, maxLives, currentLives, mistakes)
+         VALUES (1, 1, 1, 0, 0, 1, 1, 0)`
       );
       
       // Reset completed sudokus counts - ensure rows exist first
@@ -236,6 +245,7 @@ export const usePlayerStore = create((set, get) => ({
       // Reset player store state
       set({
         level: 1,
+        highestLevel: 1,
         totalCompletedSudokus: 0,
         availableSudokus: 0,
         maxLives: 1,

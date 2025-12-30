@@ -174,3 +174,7 @@ Submit to app stores
 ```bash
 npx eas-cli@latest build --platform all --auto-submit
 ```
+
+## Resources
+
+- [Pixie Haus](https://pixie.haus/) - AI-powered pixel art generation tool

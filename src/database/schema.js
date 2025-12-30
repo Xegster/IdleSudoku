@@ -2,6 +2,7 @@ export const CREATE_TABLES = `
   CREATE TABLE IF NOT EXISTS player (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     level INTEGER NOT NULL DEFAULT 1,
+    highestLevel INTEGER NOT NULL DEFAULT 1,
     totalCompletedSudokus INTEGER NOT NULL DEFAULT 0,
     availableSudokus INTEGER NOT NULL DEFAULT 0,
     maxLives INTEGER NOT NULL DEFAULT 1,
@@ -42,8 +43,8 @@ export const CREATE_TABLES = `
 `;
 
 export const INITIALIZE_PLAYER = `
-  INSERT OR IGNORE INTO player (id, level, totalCompletedSudokus, availableSudokus, maxLives, currentLives, mistakes)
-  VALUES (1, 1, 0, 0, 1, 1, 0);
+  INSERT OR IGNORE INTO player (id, level, highestLevel, totalCompletedSudokus, availableSudokus, maxLives, currentLives, mistakes)
+  VALUES (1, 1, 1, 0, 0, 1, 1, 0);
 `;
 
 export const INITIALIZE_COMPLETED_SUDOKUS = `

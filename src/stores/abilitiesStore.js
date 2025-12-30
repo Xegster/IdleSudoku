@@ -81,7 +81,9 @@ export const useAbilitiesStore = create((set, get) => ({
   },
 
   checkUnlocks: () => {
-    const playerLevel = usePlayerStore.getState().level;
+    // Use highestLevel instead of level so abilities don't re-lock when sudokus are spent
+    const playerStore = usePlayerStore.getState();
+    const playerLevel = playerStore.highestLevel || playerStore.level;
     const abilities = getAbilities();
     
     abilities.forEach(ability => {

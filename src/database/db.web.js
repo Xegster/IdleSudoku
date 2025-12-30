@@ -1,4 +1,3 @@
-import { Platform } from 'react-native';
 import { CREATE_TABLES, INITIALIZE_PLAYER, INITIALIZE_COMPLETED_SUDOKUS, INITIALIZE_SETTINGS } from './schema';
 
 let db = null;
@@ -135,28 +134,13 @@ async function createWebDatabase() {
   };
 }
 
-// Native database using expo-sqlite
-async function createNativeDatabase() {
-  try {
-    const SQLite = require('expo-sqlite');
-    return await SQLite.openDatabaseAsync('idleSudoku.db');
-  } catch (error) {
-    console.error('Failed to load expo-sqlite:', error);
-    throw new Error('expo-sqlite is required for native platforms. Please ensure it is installed.');
-  }
-}
-
 export async function initializeDatabase() {
   if (db) {
     return db;
   }
 
   try {
-    if (Platform.OS === 'web') {
-      db = await createWebDatabase();
-    } else {
-      db = await createNativeDatabase();
-    }
+    db = await createWebDatabase();
     
     // Create tables
     await db.execAsync(CREATE_TABLES);
@@ -190,8 +174,20 @@ async function runMigrations(database) {
       await database.runAsync('ALTER TABLE settings ADD COLUMN debugErrorsEnabled INTEGER NOT NULL DEFAULT 1');
       console.log('Migration completed: debugErrorsEnabled column added');
     }
+
+    // Migration: Add highestLevel column if it doesn't exist
+    try {
+      await database.getFirstAsync('SELECT highestLevel FROM player LIMIT 1');
+    } catch (error) {
+      // Column doesn't exist, add it and initialize with current level
+      console.log('Adding highestLevel column to player table...');
+      await database.runAsync('ALTER TABLE player ADD COLUMN highestLevel INTEGER NOT NULL DEFAULT 1');
+      // Initialize highestLevel with current level for existing players
+      await database.runAsync('UPDATE player SET highestLevel = level WHERE highestLevel IS NULL OR highestLevel < level');
+      console.log('Migration completed: highestLevel column added');
+    }
   } catch (error) {
-    // If settings table doesn't exist yet, that's fine - CREATE_TABLES will handle it
+    // If tables don't exist yet, that's fine - CREATE_TABLES will handle it
     console.log('Migration check skipped (table may not exist yet):', error.message);
   }
 }

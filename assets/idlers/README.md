@@ -4,8 +4,12 @@ Place idler image files in this directory.
 
 ## Current Images
 
-- `elementary_school.gif` - Animated GIF for the Elementary School idler
-- `elementary_school.webp` - Still image (WebP format) for the Elementary School idler
+No images currently. Add placeholder images for:
+- `elementary_school.png` - Elementary School idler
+- `seniors_home.png` - Senior's Home idler
+- `engineers.png` - Engineers idler
+- `mathematicians.png` - Mathematicians idler
+- `software_engineers.png` - Software Engineers idler
 
 ## Adding New Images
 
@@ -16,8 +20,7 @@ Place idler image files in this directory.
 
 ## Supported Formats
 
-- GIF (animated GIFs are supported and will animate automatically)
 - PNG
 - WebP
 - JPG/JPEG
-
+- GIF (animated GIFs are supported)

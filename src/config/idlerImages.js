@@ -1,16 +1,10 @@
 // Image imports for idlers
 // Add image imports here as you add them to the assets/idlers folder
 
-// Elementary School - animated GIF
-const elementarySchoolGif = require('@assets/idlers/elementary_school.gif');
-const elementarySchoolWebp = require('@assets/idlers/elementary_school.webp');
-
 // Image mapping: idler image filename -> imported image source
 export const idlerImageMap = {
-  'elementary_school.gif': elementarySchoolGif,
-  'elementary_school.webp': elementarySchoolWebp,
-  // Add more mappings as needed
-  'elementary_school.png': null, // fallback or placeholder
+  // Placeholder mappings - add actual images as they are added to assets/idlers
+  'elementary_school.png': null,
   'seniors_home.png': null,
   'engineers.png': null,
   'mathematicians.png': null,
@@ -29,4 +23,3 @@ export function getIdlerImageSource(imageFilename) {
   console.warn(`Image not found: ${imageFilename}`);
   return null;
 }
-

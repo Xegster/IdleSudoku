@@ -47,7 +47,9 @@ export const GameScreen = () => {
       case 'complete':
         return <CompleteSudokuTab />;
       case 'tab2':
-        if (playerStore.level >= 5) {
+        // Use highestLevel so tab doesn't re-lock when sudokus are spent
+        const playerHighestLevel = playerStore.highestLevel || playerStore.level;
+        if (playerHighestLevel >= 5) {
           return <IdlersTab />;
         }
         return <Box p={4}>Tab 2 - Locked</Box>;
@@ -143,11 +145,11 @@ export const GameScreen = () => {
         </Button>
         <Button
           onPress={() => setActiveTab('tab2')}
-          isDisabled={playerStore.level < 5}
+          isDisabled={(playerStore.highestLevel || playerStore.level) < 5}
           variant="ghost"
           size="sm"
         >
-          <ButtonText>{playerStore.level >= 5 ? 'Idlers' : '2'}</ButtonText>
+          <ButtonText>{(playerStore.highestLevel || playerStore.level) >= 5 ? 'Idlers' : '2'}</ButtonText>
         </Button>
         <Button
           onPress={() => setActiveTab('complete')}
