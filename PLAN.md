@@ -3,6 +3,23 @@
 ## Project Overview
 Idle Sudoku is a React Native game that combines traditional Sudoku puzzle solving with idle game mechanics. Players solve Sudoku puzzles to progress, unlock abilities, and manage idlers that automatically generate puzzles.
 
+## ⚠️ PLATFORM PRIORITY - CRITICAL
+
+**PRIMARY RELEASE PLATFORM: MOBILE (Android/iOS)**
+
+**ALL design decisions, UI/UX choices, and development priorities MUST be made with mobile devices as the primary target.** The web version is secondary and should NEVER drive design decisions.
+
+### Mobile-First Design Principles:
+- **Prioritize touch interactions** over mouse/keyboard
+- **Design for small screens first** (mobile viewport)
+- **Ensure all UI elements are easily tappable** on mobile (minimum 44x44pt touch targets)
+- **Test on physical devices**, not just emulators
+- **Optimize for mobile performance** and battery life
+- **Consider one-handed usage** patterns
+- **Grid lines and borders** must render correctly on Android (known issue with current implementation)
+- **Font sizes** must be readable on small screens
+- **Spacing and padding** optimized for touch, not mouse precision
+
 ## Current Status
 
 ### ✅ Completed Features
@@ -54,8 +71,37 @@ Idle Sudoku is a React Native game that combines traditional Sudoku puzzle solvi
 
 ## Development Roadmap
 
-### Phase 1: Core Game Polish & Bug Fixes
-**Priority: High | Estimated Time: 1-2 weeks**
+### Phase 1: Mobile UI/UX Fixes & Critical Bug Fixes
+**Priority: CRITICAL | Estimated Time: 1-2 weeks**
+
+#### Mobile UI/UX Fixes (TOP PRIORITY - MUST FIX BEFORE RELEASE)
+
+**🚨 CRITICAL UI ISSUES:**
+- [ ] **Fix Sudoku grid lines on Android** - Grid lines appear broken/poorly rendered on mobile
+  - **HIGHEST PRIORITY** - This is the most visible UI issue on mobile
+  - Investigate border rendering issues on Android
+  - Ensure grid lines are crisp and visible on all screen densities
+  - Test on multiple Android devices and screen sizes
+  - Consider using View borders, custom drawing, or SVG for better mobile rendering
+  - May need platform-specific rendering code for Android vs iOS
+- [ ] **Fix Settings modal crash** - App crashes when opening settings (CRITICAL BUG)
+  - Must be fixed immediately - blocks user access to settings
+  - Investigate crash logs to identify root cause
+  - Likely related to store initialization or component rendering on mobile
+
+**📱 MOBILE UX IMPROVEMENTS:**
+- [ ] **Improve touch targets** - Ensure all buttons and cells are easily tappable
+  - Minimum 44x44pt touch targets (iOS/Android guidelines)
+  - Increase spacing between interactive elements
+  - Test on various screen sizes
+- [ ] **Optimize layout for mobile screens**
+  - Ensure Sudoku board fits properly on small screens
+  - Adjust font sizes for readability on mobile
+  - Improve spacing and padding for touch interactions
+  - Test in both portrait and landscape orientations
+- [ ] Improve cell selection visual feedback for mobile
+- [ ] Add haptic feedback for cell selection and number input
+- [ ] Optimize number pad for mobile (larger buttons, better spacing)
 
 #### Gameplay Improvements
 - [ ] Improve Sudoku difficulty scaling
@@ -64,11 +110,10 @@ Idle Sudoku is a React Native game that combines traditional Sudoku puzzle solvi
 - [ ] Add completion animations/celebrations
 - [ ] Improve board generation algorithm (ensure unique solutions)
 
-#### UI/UX Enhancements
-- [ ] Improve cell selection visual feedback
-- [ ] Add number input keyboard/selector
+#### Additional UI/UX Enhancements
+- [ ] Add number input keyboard/selector optimized for mobile
 - [ ] Improve ability button states (disabled/enabled/cooldown)
-- [ ] Add tooltips/help text for abilities
+- [ ] Add tooltips/help text for abilities (mobile-friendly)
 - [ ] Improve tab navigation (fix tab1 button, improve labels)
 - [ ] Add loading states for async operations
 

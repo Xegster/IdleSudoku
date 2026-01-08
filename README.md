@@ -165,6 +165,65 @@ If you want to run as a true Windows desktop app (not web), you'll need to set u
 
 ## Deployment
 
+### Building Android Debug APK (Standalone)
+
+To build a standalone Android debug APK that works without a development server connection:
+
+```bash
+npm run android:build:debug
+```
+
+This command will:
+1. Export and bundle all JavaScript assets using Expo
+2. Build the debug APK with the bundled assets included
+
+The APK will be generated at:
+```
+android/app/build/outputs/apk/debug/app-debug.apk
+```
+
+**Prerequisites:**
+- Android SDK installed and configured
+- Java Development Kit (JDK) installed
+- Environment variables set (ANDROID_HOME, JAVA_HOME)
+
+**Steps to Build:**
+1. Ensure all dependencies are installed:
+   ```bash
+   npm install
+   ```
+
+2. Prebuild the Android project (if needed, only required once):
+   ```bash
+   npm run android:prebuild
+   ```
+
+3. Build the standalone debug APK:
+   ```bash
+   npm run android:build:debug
+   ```
+   
+   This automatically:
+   - Exports and bundles JavaScript assets using `expo export --platform android`
+   - Builds the APK with bundled assets included
+   - Creates a standalone APK that works offline
+
+4. The APK will be generated at `android/app/build/outputs/apk/debug/app-debug.apk`
+
+**Installing the Debug APK:**
+- Transfer the APK to an Android device
+- Enable "Install from Unknown Sources" in device settings
+- Open the APK file on the device to install
+- Or use ADB to install: `adb install android/app/build/outputs/apk/debug/app-debug.apk`
+
+**Important Notes:**
+- The debug APK is signed with a debug keystore and is suitable for testing only
+- This APK includes all JavaScript bundles and works **without** a development server connection
+- For production releases, use the release build process
+- If you need to rebuild after code changes, run `npm run android:build:debug` again
+
+### Publishing to App Stores
+
 Connect to Expo
 ```bash
 npx eas-cli@latest init --id 38be4db9-a5b8-4b8d-968d-768e175a5933

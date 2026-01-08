@@ -10,9 +10,10 @@
     "windows": "expo start --windows",
     "postinstall": "patch-package",
     "android:prebuild": "expo prebuild --platform android",
-    "android:build:debug": "cd android && gradlew.bat assembleDebug",
-    "android:build:release": "cd android && gradlew.bat assembleRelease",
-    "android:build:bundle": "cd android && gradlew.bat bundleRelease"
+    "android:export": "npx expo export --platform android",
+    "android:build:debug": "npm run android:export && cd android && gradlew.bat assembleDebug",
+    "android:build:release": "npm run android:export && cd android && gradlew.bat assembleRelease",
+    "android:build:bundle": "npm run android:export && cd android && gradlew.bat bundleRelease"
   },
   "dependencies": {
     "@gluestack-ui/config": "^1.1.20",

@@ -10,6 +10,7 @@ import { useAbilitiesStore } from '@/stores/abilitiesStore';
 import { useIdlersStore } from '@/stores/idlersStore';
 import { useGameStore } from '@/stores/gameStore';
 import { setupAppLifecycle } from '@/utils/appLifecycle';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 export const GameScreen = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -176,11 +177,15 @@ export const GameScreen = () => {
         </Button>
       </HStack>
 
-      <SettingsModal
-        isOpen={settingsOpen}
-        onClose={() => setSettingsOpen(false)}
-      />
-      <StatsModal isOpen={statsOpen} onClose={() => setStatsOpen(false)} />
+      <ErrorBoundary>
+        <SettingsModal
+          isOpen={settingsOpen}
+          onClose={() => setSettingsOpen(false)}
+        />
+      </ErrorBoundary>
+      <ErrorBoundary>
+        <StatsModal isOpen={statsOpen} onClose={() => setStatsOpen(false)} />
+      </ErrorBoundary>
     </VStack>
   );
 };

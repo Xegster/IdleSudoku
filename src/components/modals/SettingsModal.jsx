@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   ModalBackdrop,
@@ -11,15 +11,12 @@ import {
   VStack,
   HStack,
   Text,
-  Switch,
-  SwitchTrack,
-  SwitchThumb,
   Button,
   ButtonText,
   Heading,
   Divider,
 } from '@gluestack-ui/themed';
-import { Alert } from 'react-native';
+import { Alert, Switch } from 'react-native';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useAbilitiesStore } from '@/stores/abilitiesStore';
 import { usePlayerStore } from '@/stores/playerStore';
@@ -34,45 +31,102 @@ export const SettingsModal = ({
   isOpen,
   onClose,
 }) => {
+  // Hooks must be called unconditionally
   const settingsStore = useSettingsStore();
   const abilitiesStore = useAbilitiesStore();
   const playerStore = usePlayerStore();
   const idlersStore = useIdlersStore();
   const gameStore = useGameStore();
-  const autofillUnlocked = abilitiesStore.isAbilityUnlocked('autofill');
+
   const [isResetting, setIsResetting] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  // Safely check if abilities are unlocked with error handling
+  let autofillUnlocked = false;
+  let checkAnswersUnlocked = false;
+  
+  try {
+    if (abilitiesStore && typeof abilitiesStore.isAbilityUnlocked === 'function') {
+      autofillUnlocked = abilitiesStore.isAbilityUnlocked('autofill');
+      checkAnswersUnlocked = abilitiesStore.isAbilityUnlocked('checkAnswers');
+    }
+  } catch (error) {
+    console.error('Error checking ability unlocks:', error);
+  }
+
+  // Reset error state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setHasError(false);
+      setErrorMessage(null);
+    }
+  }, [isOpen]);
+
 
   const executeReset = async () => {
     setIsResetting(true);
+    setHasError(false);
+    setErrorMessage(null);
+    
     try {
       console.log('Starting game reset...');
       
-      // Reset all stores
+      // Validate stores exist before using them
+      if (!playerStore || !idlersStore || !abilitiesStore || !gameStore) {
+        throw new Error('One or more stores are not available');
+      }
+      
+      // Reset all stores with error handling
       console.log('Resetting player data...');
-      await playerStore.resetGame();
+      if (playerStore.resetGame && typeof playerStore.resetGame === 'function') {
+        await playerStore.resetGame();
+      } else {
+        console.warn('playerStore.resetGame is not available');
+      }
       
       console.log('Resetting idlers...');
-      await idlersStore.resetIdlers();
+      if (idlersStore.resetIdlers && typeof idlersStore.resetIdlers === 'function') {
+        await idlersStore.resetIdlers();
+      } else {
+        console.warn('idlersStore.resetIdlers is not available');
+      }
       
       console.log('Resetting abilities...');
-      await abilitiesStore.resetAbilities();
+      if (abilitiesStore.resetAbilities && typeof abilitiesStore.resetAbilities === 'function') {
+        await abilitiesStore.resetAbilities();
+      } else {
+        console.warn('abilitiesStore.resetAbilities is not available');
+      }
       
       console.log('Resetting game state...');
-      gameStore.resetGameState();
+      if (gameStore.resetGameState && typeof gameStore.resetGameState === 'function') {
+        gameStore.resetGameState();
+      } else {
+        console.warn('gameStore.resetGameState is not available');
+      }
       
       // Reload data
       console.log('Reloading player data...');
-      await playerStore.loadPlayerData();
+      if (playerStore.loadPlayerData && typeof playerStore.loadPlayerData === 'function') {
+        await playerStore.loadPlayerData();
+      }
       
       console.log('Reloading idlers...');
-      await idlersStore.loadIdlers();
+      if (idlersStore.loadIdlers && typeof idlersStore.loadIdlers === 'function') {
+        await idlersStore.loadIdlers();
+      }
       
       console.log('Reloading abilities...');
-      await abilitiesStore.loadAbilities();
+      if (abilitiesStore.loadAbilities && typeof abilitiesStore.loadAbilities === 'function') {
+        await abilitiesStore.loadAbilities();
+      }
       
       // Load a new board
       console.log('Loading new board...');
-      gameStore.loadNewBoard('easy');
+      if (gameStore.loadNewBoard && typeof gameStore.loadNewBoard === 'function') {
+        gameStore.loadNewBoard('easy');
+      }
       
       console.log('Reset complete!');
       
@@ -86,6 +140,9 @@ export const SettingsModal = ({
     } catch (error) {
       console.error('Error resetting game:', error);
       console.error('Error stack:', error.stack);
+      setHasError(true);
+      setErrorMessage(error.message || 'Unknown error occurred');
+      
       const isWeb = typeof window !== 'undefined';
       if (isWeb) {
         window.alert(`Error: Failed to reset game: ${error.message}. Please check the console for details.`);
@@ -130,6 +187,33 @@ export const SettingsModal = ({
     }
   };
 
+  // Don't render modal if stores aren't available
+  if (!settingsStore || !abilitiesStore || !playerStore || !idlersStore || !gameStore) {
+    if (!isOpen) return null;
+    return (
+      <Modal isOpen={isOpen} onClose={onClose} size="lg">
+        <ModalBackdrop />
+        <ModalContent>
+          <ModalHeader>
+            <Heading>Settings</Heading>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text color="$red600">Error: Stores not initialized. Please restart the app.</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button onPress={onClose}>
+              <ButtonText>Close</ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
+
+  // Don't render if modal is closed
+  if (!isOpen) return null;
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalBackdrop />
@@ -140,29 +224,47 @@ export const SettingsModal = ({
         <ModalCloseButton />
         <ModalBody>
           <VStack space="md">
+            {hasError && errorMessage && (
+              <Box bg="$red50" p="$2" borderRadius="$md" mb="$2">
+                <Text size="sm" color="$red600">{errorMessage}</Text>
+              </Box>
+            )}
+            
             <HStack justifyContent="space-between" alignItems="center">
               <Text size="md">Sound</Text>
               <Switch
-                value={settingsStore.soundEnabled}
-                onValueChange={settingsStore.toggleSound}
-              >
-                <SwitchTrack>
-                  <SwitchThumb />
-                </SwitchTrack>
-              </Switch>
+                value={settingsStore?.soundEnabled ?? true}
+                onValueChange={() => {
+                  try {
+                    if (settingsStore?.toggleSound) {
+                      settingsStore.toggleSound();
+                    }
+                  } catch (error) {
+                    console.error('Error toggling sound:', error);
+                    setHasError(true);
+                    setErrorMessage('Failed to toggle sound setting');
+                  }
+                }}
+              />
             </HStack>
 
-            {abilitiesStore.isAbilityUnlocked('checkAnswers') && (
+            {checkAnswersUnlocked && (
               <HStack justifyContent="space-between" alignItems="center">
                 <Text size="md">Check Answers</Text>
                 <Switch
-                  value={settingsStore.checkAnswersEnabled}
-                  onValueChange={settingsStore.toggleCheckAnswers}
-                >
-                  <SwitchTrack>
-                    <SwitchThumb />
-                  </SwitchTrack>
-                </Switch>
+                  value={settingsStore?.checkAnswersEnabled ?? false}
+                  onValueChange={() => {
+                    try {
+                      if (settingsStore?.toggleCheckAnswers) {
+                        settingsStore.toggleCheckAnswers();
+                      }
+                    } catch (error) {
+                      console.error('Error toggling check answers:', error);
+                      setHasError(true);
+                      setErrorMessage('Failed to toggle check answers setting');
+                    }
+                  }}
+                />
               </HStack>
             )}
 
@@ -170,13 +272,19 @@ export const SettingsModal = ({
               <HStack justifyContent="space-between" alignItems="center">
                 <Text size="md">Autofill</Text>
                 <Switch
-                  value={settingsStore.autofillEnabled}
-                  onValueChange={settingsStore.toggleAutofill}
-                >
-                  <SwitchTrack>
-                    <SwitchThumb />
-                  </SwitchTrack>
-                </Switch>
+                  value={settingsStore?.autofillEnabled ?? false}
+                  onValueChange={() => {
+                    try {
+                      if (settingsStore?.toggleAutofill) {
+                        settingsStore.toggleAutofill();
+                      }
+                    } catch (error) {
+                      console.error('Error toggling autofill:', error);
+                      setHasError(true);
+                      setErrorMessage('Failed to toggle autofill setting');
+                    }
+                  }}
+                />
               </HStack>
             )}
 
@@ -184,13 +292,19 @@ export const SettingsModal = ({
               <HStack justifyContent="space-between" alignItems="center">
                 <Text size="md">Debug Errors</Text>
                 <Switch
-                  value={settingsStore.debugErrorsEnabled}
-                  onValueChange={settingsStore.toggleDebugErrors}
-                >
-                  <SwitchTrack>
-                    <SwitchThumb />
-                  </SwitchTrack>
-                </Switch>
+                  value={settingsStore?.debugErrorsEnabled ?? true}
+                  onValueChange={() => {
+                    try {
+                      if (settingsStore?.toggleDebugErrors) {
+                        settingsStore.toggleDebugErrors();
+                      }
+                    } catch (error) {
+                      console.error('Error toggling debug errors:', error);
+                      setHasError(true);
+                      setErrorMessage('Failed to toggle debug errors setting');
+                    }
+                  }}
+                />
               </HStack>
             )}
 
