@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, HStack, Button, ButtonText, VStack, Text } from '@gluestack-ui/themed';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SettingsModal } from '@/components/modals/SettingsModal';
 import { StatsModal } from '@/components/modals/StatsModal';
 import { CompleteSudokuTab } from './tabs/CompleteSudokuTab';
@@ -16,6 +17,7 @@ export const GameScreen = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('complete');
+  const insets = useSafeAreaInsets();
 
   const playerStore = usePlayerStore();
   const settingsStore = useSettingsStore();
@@ -60,7 +62,12 @@ export const GameScreen = () => {
   };
 
   return (
-    <VStack flex={1} bg="$gray100">
+    <VStack 
+      flex={1} 
+      bg="$gray100"
+      pt={insets.top}
+      pb={insets.bottom}
+    >
       {/* Top Bar */}
       <HStack
         justifyContent="space-between"
